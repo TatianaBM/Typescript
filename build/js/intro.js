@@ -1,3 +1,4 @@
+// LESSON 1
 // typescript is js with syntax for types, it helps writing better js
 // ts extends js
 let username = 'miro';
@@ -33,6 +34,41 @@ let c = 2;
 // thats why we need to spicify types 
 console.log(a / b);
 console.log(b * c);
-export {};
 // valid js = valid ts but it does not mean compiler is goign to like it. So we need to pay attention to ts compilet to help us write better code
+// LESSON 2
+// ts is staticl typed language meanign tyypes are check during compilation
+// whereas js if dynamically typed language means types are checked during runtime
+//we implicitly declared type
+let myName = 'Tania';
+//compliler does not like it cause we implicitly declared string data tyype
+//myName = 42
+let mySurname;
+mySurname = 'White';
+let meaningOfLife;
+let isLoading;
+// when we are not sure what data type we will be receiving
+let album;
+// union type, e.g. string or number, it can be more that just two different types
+let data;
+data = 415;
+data = 'any string';
+meaningOfLife = 42;
+isLoading = true;
+album = 'any type';
+// ts can infer what a function is going to return based on what it knows about the function
+const sum = (a, b) => {
+    return a + b;
+};
+// here sum1 is going to return a string, ts infers that string will be returned
+const sum1 = (a, b) => {
+    return a + b;
+};
+//union type
+let postId;
+let isActive;
+// regExp type
+// ts intellisense tells you what type you can put
+let re = /\w+/g; //regular expression all words
+console.log(isLoading);
+export {};
 //# sourceMappingURL=intro.js.map
