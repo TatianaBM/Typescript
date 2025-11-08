@@ -70,5 +70,112 @@ let isActive;
 // ts intellisense tells you what type you can put
 let re = /\w+/g; //regular expression all words
 console.log(isLoading);
+// LESSON 3
+// arrays
+let stringArr = ['one', 'hey', 'today'];
+let guitars = ['strat', 'les paul', 1980];
+let mixedData = ['tomorrow', 1985, true];
+//stringArr[0] = 42
+stringArr[0] = '42';
+stringArr.push('hello');
+guitars[0] = 1546;
+guitars.unshift('world');
+console.log(guitars);
+//stringArr = guitars
+guitars = stringArr;
+console.log(guitars);
+mixedData = guitars;
+let test = [];
+let bands = [];
+bands.push('Van');
+//bands.push(42)
+// the length of the array and the order of the types do not matter
+//ts just knows what types belong to the array
+//however to be more strict we can create a tuple
+// we define specific position and specific length
+let strictTuple = ['lunch', 42, true];
+strictTuple.push('85');
+//strictTuple[4] = 'el'
+strictTuple[0] = 'dinner';
+//strictTuple[0] = 55
+console.log(strictTuple);
+// below is union type , not tuple
+let mixed = ['dinner', 2, false];
+mixed = strictTuple;
+//strictTuple = mixed    not possible cause tuple thinks that mixed may not have all three elements
+// Objects
+let myObj;
+//we can reassign to an array cause array is also an object in js
+myObj = [];
+console.log(typeof myObj);
+myObj = bands;
+console.log(myObj);
+const exampleObj = {
+    prop1: 'Tania',
+    prop2: true,
+};
+let evh = {
+    name: 'Bon Jovi',
+    active: true,
+    albums: ['album1', 'album2', 5]
+};
+let jp = {
+    name: 'Jimmy',
+    active: false,
+    albums: [8, 'album1', 7]
+};
+evh = jp;
+let eng1 = {
+    name: 'John',
+    experience: ['company1', 10, 5]
+};
+const greetEnginner = (eng) => {
+    return `Hello ${eng.name} !`;
+};
+console.log(greetEnginner(eng1));
+let waiter = {
+    name: 'Sergio',
+    age: 45,
+    isActive: true,
+    hobbies: ['drawing', 12, 'swimming']
+};
+let sallesPerson = {
+    age: 22,
+    isActive: true,
+    hobbies: [1, 12, 'swimming']
+};
+const greetPerson = (person) => {
+    return `Hi ${person.name}, how are you?`;
+};
+console.log(greetPerson(waiter));
+console.log(greetPerson(sallesPerson));
+const greetSalles = (person) => {
+    if (person.name) {
+        return `Hi ${person.name.toUpperCase()}, how are you?`;
+    }
+    return 'hi';
+};
+console.log(greetSalles(sallesPerson));
+// interface here works the same as type
+// Enums
+//Enums are one of the few features TypeScript has which is not a type-level extension of JavaScript.
+//Enums allow a developer to define a set of named constants. Using enums can make it easier to document intent,
+// or create a set of distinct cases. TypeScript provides both numeric and string-based enums
+var Grade;
+(function (Grade) {
+    Grade[Grade["A"] = 0] = "A";
+    Grade[Grade["B"] = 1] = "B";
+    Grade[Grade["C"] = 2] = "C";
+    Grade[Grade["D"] = 3] = "D";
+})(Grade || (Grade = {}));
+console.log(Grade.A);
+var Direction;
+(function (Direction) {
+    Direction[Direction["up"] = 1] = "up";
+    Direction[Direction["down"] = 2] = "down";
+    Direction[Direction["right"] = 3] = "right";
+    Direction[Direction["left"] = 4] = "left";
+})(Direction || (Direction = {}));
+console.log(Direction.down);
 export {};
 //# sourceMappingURL=intro.js.map
