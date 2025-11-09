@@ -226,3 +226,153 @@ enum Direction {
     left
 }
 console.log(Direction.down)
+
+// type aliases - we are creating aliases for typescript types
+type stringOrNumber = (string | number)
+type stringOrNumberArray = (string | number)[]
+type Player = {
+    name: string,
+    age: number,
+    club: stringOrNumberArray
+}
+type userId = stringOrNumber
+
+// but we cannot do it with interface
+//interface PostId = stringOrNumber
+
+//Literal Types, literal assignment
+let myName1 : 'tania'
+//myName1 = 'john'
+// this is useful when you have union type, cause there might be variable where only certain values are expected
+let userName : 'Dave' | 'John' | 'Amy'
+userName = 'Amy'
+//userName = 'rachel'
+
+//benefits of type aliases and literal types - to keep code DRY (do not repeat yourself)
+
+// FUNCTIONS
+// with return
+const add = (a: number, b: number): number => {
+    return a + b
+}
+//without return - void type is for functions that do not return anything
+const logMsg = (message: any): void => {
+    console.log(message)
+}
+logMsg('no return function')
+logMsg(add(2,5))
+
+let substruct = function(a: number, b: number): number {
+    return a-b
+}
+
+// create type alias
+type mathFunction = (a: number, b: number) => number
+
+let multiply: mathFunction = function(a,b) {
+    return a*b
+}
+console.log(multiply(8,3))
+
+// interface here is also an option 
+// but typically when we think about interfaces we think about classes, so we would rather use type aliases
+
+interface math {
+    (a: number, b: number): number
+}
+let divide: math = function(a,b) {
+    return a/b
+}
+logMsg(divide(8,4))
+
+// functions with optional parameters
+// optional parameter must be the last in the list!!!!!!!!!!!!!!!!
+const addAll = (a: number, b: number, c?: number): number => {
+    //type guard
+    if(typeof c !== 'undefined') {
+          return a + b + c
+    } 
+    return a + b
+}
+console.log(addAll(2,8))
+console.log(addAll(2,8,8))
+
+// function with a default parameter value
+const sumAll = (a: number, b: number, c: number = 2): number => {
+    //type guard
+    if(typeof c !== 'undefined') {
+          return a + b + c
+    } 
+    return a + b
+}
+logMsg(sumAll(1,2,3))
+logMsg(sumAll(1,2))
+
+// when default param is not the last, we should pass undefined
+const sumAll1 = (a: number = 10, b: number, c: number = 2): number => {
+    //type guard
+    if(typeof c !== 'undefined') {
+          return a + b + c
+    } 
+    return a + b
+}
+logMsg(sumAll1(undefined,3))
+
+// however with an alias type or interface , we can not do it with default values
+
+// Rest Parameters 
+// rest operator should come at the end
+const total = (...nums: number[]): number => {
+    return nums.reduce((prev, curr) => prev + curr)
+}
+logMsg(total(1,2,3,4))
+
+const total1 = (a: number, ...nums: number[]): number => {
+    return a + nums.reduce((prev, curr) => prev + curr)
+}
+logMsg(total1(1,2))
+
+// never type
+// for functiona that explicitly return errors 
+
+const createError = (errorMsg: string): never=> {
+    throw new Error(errorMsg)
+}
+
+// infinite loop returns also never type
+const infinite = () => {
+    let i: number = 1
+    while(true) {
+        i++
+    }
+}
+// we should avoid a function returning never type, meaning if we see a function returns never type,
+// there is an issue with the function, e.g. endless loop
+// ts always helping by infering data type
+
+const infinite1 = () => {
+    let i: number = 1
+    while(true) {
+        i++
+        if(i > 100) break
+    }
+}
+
+// when never type can be useful
+
+// custom type guards
+const isNumber = (value: any): boolean => {
+    return typeof value === 'number' ? true : false
+}
+
+// use of the never type
+const numberOrstring = (value: number | string): string => {
+    //type guards
+    if(typeof value === 'string') return 'string'
+    if(isNumber(value)) return 'number'
+    //return never type. we need this error to handle potential underfined, when two ifs wont be true
+    return createError('This should never happen!')
+}
+logMsg(numberOrstring('da'))
+// will throw an error
+//logMsg(numberOrstring(true))
