@@ -322,7 +322,137 @@ const img1 = document.getElementById('#myId');
 // or we can use angle bracket notation
 const nextImg = document.getElementById('#myImg');
 // select source property
-img.src;
-img1.src;
+//img.src
+//mg1.src
+// CLASSES
+// basic structure
+// by  default properties and methods are public
+// public, private , readonly, protected- are visibility modifiers
+// private means it can only be accesed in the class
+// readonly means once the name is assigned it cant be changed
+class Coder {
+    constructor(name, music, age, 
+    // we added optional parameter with the default value
+    lang = 'Typescript') {
+        this.name = name;
+        this.music = music;
+        this.age = age;
+        this.lang = lang;
+        this.name = name;
+        this.music = music;
+        this.age = age;
+        this.lang = lang;
+    }
+    //age is private but we van acces it inside of the class
+    getAge() {
+        return `Hello I am ${this.age}`;
+    }
+}
+// Difference between private and protected. Private can only be accessed in the class.
+// Protected and be acceses also when class in extended
+const Dave = new Coder('Dave White', 'rock', 32);
+logMsg(Dave.music);
+logMsg(Dave.getAge());
+//but we cant access age and lang directly
+// TS does not like it but it is a legal JS
+// but we can change this behaviour in a setting: TS do not compile if you do not lile something
+//logMsg(Dave.age)
+//logMsg(Dave.lang)
+//lets extend class
+class WebDev extends Coder {
+    constructor(computer, 
+    //following are from the Coder class
+    // no midifiers here
+    name, music, age) {
+        //super must be the first
+        super(name, music, age);
+        this.computer = computer;
+        this.computer = computer;
+    }
+    //within a subclass we still can access lang
+    getLang() {
+        return `I write ${this.lang}`;
+    }
+}
+// computer must be first here
+const webDeveloper = new WebDev('windows', 'Tania', 'rock', 41);
+logMsg(webDeveloper.getLang());
+logMsg(webDeveloper.name);
+logMsg(webDeveloper.getAge());
+// now we implement it to a class
+// to make sure all the members of the class are as axpected (as implemented by interface)
+class Guitarists {
+    constructor(name, instrument) {
+        this.name = name,
+            this.instrument = instrument;
+    }
+    play(action) {
+        return `${this.name} ${action} ${this.instrument}`;
+    }
+}
+const Page = new Guitarists('jimmy', 'guitar');
+logMsg(Page.play('strums'));
+///////////////////////////
+// static here means that count property does not apply to any instantiations 
+// it applies to the class directly itself
+//static properties belong to the class itself, not to any individual instance.
+class Peeps {
+    static getCount() {
+        return Peeps.count;
+    }
+    constructor(name) {
+        this.name = name;
+        this.name = name;
+        // here ++ on the left means we need to increment first, meaning id will be 1 while count 0
+        //++Peeps.count increments the static count first, then returns the new value.
+        this.id = ++Peeps.count;
+    }
+}
+Peeps.count = 0;
+// static key word - whatever we do it applies directly to a class
+const John = new Peeps('John');
+logMsg(Peeps.count);
+logMsg(John.id);
+const Steve = new Peeps('Steve');
+logMsg(Peeps.count);
+logMsg(Steve.id);
+const David = new Peeps('David');
+logMsg(Peeps.count);
+logMsg(David.id);
+// this will tell us how many times class was instantiated 
+//Because count is shared by the class, not copied for each object, every instance sees the same updated count
+logMsg(Peeps.count);
+///////////////////////////////////////
+// getters & setters
+class Bands {
+    constructor() {
+        this.dataState = [];
+    }
+    // getter without setter is read only
+    get data() {
+        return this.dataState;
+    }
+    // now we do validation to make sure this data is correct
+    set data(value) {
+        //make sure it an array
+        if (Array.isArray(value) && value.every(el => typeof el === 'string')) {
+            this.dataState = value;
+            //setters cant return a value that is way we have an empty return
+            return;
+        }
+        else {
+            throw new Error('Param is not an array of strings');
+        }
+    }
+}
+const MyBand = new Bands();
+MyBand.data = ['bon jovi', 'nirvana', 'red zep'];
+console.log(MyBand.data);
+MyBand.data = [...MyBand.data, 'UU'];
+console.log(MyBand.data);
 export {};
+// will throw an error
+// const YourBand = new Bands()
+// YourBand.data = [ 15 , 'nirvana', 'red zep']
+// console.log(YourBand.data)
 //# sourceMappingURL=intro.js.map
