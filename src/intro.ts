@@ -376,3 +376,53 @@ const numberOrstring = (value: number | string): string => {
 logMsg(numberOrstring('da'))
 // will throw an error
 //logMsg(numberOrstring(true))
+
+//Types assertions / type casting
+
+type One = string
+//union
+type Two = string | number
+//literal
+type Three = 'Hello'
+
+// convert to more or less specific type
+let f: One = 'Hello'
+let g = f as Two  //less specific: we have change f type to string or number
+let j = f as Three // more specific
+
+let k = <One>'World'
+let e = <String | number>5
+
+const addOrConcat = (a: number, b: number, c: 'add'| 'concat'): number | string => {
+    if( c === 'add') return a + b
+    return '' + a + b
+}
+logMsg(addOrConcat(1,2,'concat'))
+
+// in here myVal is string type, addOrConcat returns string or number, and ts does not like it
+//let myVal: string = addOrConcat(2,2,'concat')
+// we can fix this with an assertion
+// it slike we tell ts hey ingore the warning, we know better it is string type
+let myVal: string = addOrConcat(2,2,'concat') as string
+
+// Be careful! TS sees no problem here but there is a problem, as we know function will return a string
+let nextVal: number = addOrConcat(2,2,'concat') as number
+//however here TS will tell us that it is a mistake, so TS checks whem it can
+//10 as string
+
+// forced casting or double casting or two assertions
+// we are going to overrule TS using uknown type BUT NOT RECOMMENDED!!!!!!!!!!!
+(10 as unknown) as string
+
+// The DOM
+// adding ! means non NUll
+// const img = document.getElementById('img')!
+const img = document.getElementById('img') as HTMLImageElement
+// no need to use ! with combination with as
+const img1 = document.getElementById('#myId') as HTMLImageElement
+// or we can use angle bracket notation
+const nextImg = <HTMLImageElement>document.getElementById('#myImg')
+
+// select source property
+img.src
+img1.src

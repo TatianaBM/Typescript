@@ -289,7 +289,40 @@ const numberOrstring = (value) => {
     return createError('This should never happen!');
 };
 logMsg(numberOrstring('da'));
+// convert to more or less specific type
+let f = 'Hello';
+let g = f; //less specific: we have change f type to string or number
+let j = f; // more specific
+let k = 'World';
+let e = 5;
+const addOrConcat = (a, b, c) => {
+    if (c === 'add')
+        return a + b;
+    return '' + a + b;
+};
+logMsg(addOrConcat(1, 2, 'concat'));
+// in here myVal is string type, addOrConcat returns string or number, and ts does not like it
+//let myVal: string = addOrConcat(2,2,'concat')
+// we can fix this with an assertion
+// it slike we tell ts hey ingore the warning, we know better it is string type
+let myVal = addOrConcat(2, 2, 'concat');
+// Be careful! TS sees no problem here but there is a problem, as we know function will return a string
+let nextVal = addOrConcat(2, 2, 'concat');
+//however here TS will tell us that it is a mistake, so TS checks whem it can
+//10 as string
+// forced casting or double casting or two assertions
+// we are going to overrule TS using uknown type BUT NOT RECOMMENDED!!!!!!!!!!!
+10;
+// The DOM
+// adding ! means non NUll
+// const img = document.getElementById('img')!
+const img = document.getElementById('img');
+// no need to use ! with combination with as
+const img1 = document.getElementById('#myId');
+// or we can use angle bracket notation
+const nextImg = document.getElementById('#myImg');
+// select source property
+img.src;
+img1.src;
 export {};
-// will throw an error
-//logMsg(numberOrstring(true))
 //# sourceMappingURL=intro.js.map
