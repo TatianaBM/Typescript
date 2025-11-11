@@ -450,9 +450,83 @@ MyBand.data = ['bon jovi', 'nirvana', 'red zep'];
 console.log(MyBand.data);
 MyBand.data = [...MyBand.data, 'UU'];
 console.log(MyBand.data);
+// we can also write interface like here
+// interface TransactionObj {
+//     readonly [index: string]: number
+//     // here we can list required properties 
+//     Pizza: number,
+//     Books: number,
+//     Job: number
+// }
+const todaysTransactions = {
+    Pizza: -10,
+    Books: -5,
+    Job: 50
+};
+console.log(todaysTransactions.Pizza);
+console.log(todaysTransactions['Pizza']);
+//we cant reassign value cause we have readonly in interface
+//todaysTransactions.Pizza = 44
+// examples of accessing the pizza property dynamically
+let prop = 'Pizza';
+console.log(todaysTransactions[prop]);
+const todaysNet = (transactions) => {
+    let total = 0;
+    for (const transaction in transactions) {
+        //Guard the value (explicit check)
+        if (typeof transactions[transaction] === 'number')
+            total += transactions[transaction];
+    }
+    return total;
+};
+console.log(todaysNet(todaysTransactions));
+// TS also cant see properties names in the future, cause in interface we used index signature, and just 
+// indicated that a key will be a string, and value a number. So TS has no idea about actual keay and values
+// here TS does not show an error eventhough such propertie does not exist, console will show undefined
+console.log(todaysTransactions['Dave']);
+const student = {
+    name: 'May',
+    GPA: 3.5,
+    classes: [100, 200],
+    age: 20,
+    city: 'Tulsa'
+};
+// TS has no issue with us trying to access test property that does not exist
+// cause TS thinks: may be it will have test property
+console.log(student.test);
+//now lets iterate thru the object. all good cause we have index signature
+for (const key in student) {
+    console.log(`${key} : ${student[key]}`);
+}
+const engineer = {
+    name: 'Kale',
+    age: 20,
+    city: 'Boston'
+};
+// now to iterate we are going to use an assertion and keyof and TS has no issue
+for (const key in engineer) {
+    console.log(`${key} : ${engineer[key]}`);
+}
+//one more variation how to loop thru the object
+// we are retrieving the type of 'typeof student'
+Object.keys(engineer).map(key => {
+    console.log(engineer[key]);
+});
+const logEngineerKey = (engineer, key) => {
+    console.log(`Enginner ${key} : ${engineer[key]}`);
+};
+logEngineerKey(engineer, 'name');
+logEngineerKey(engineer, 'age');
+const monthlyIncomes = {
+    salary: 500,
+    bonus: 100,
+    sidehusle: 250
+};
+// lets loop thru the object
+// TS has a problen here unlike when we use index signature
+// we fix the issue with an assertion as keyof Income
+for (const revenue in monthlyIncomes) {
+    console.log(`${revenue} is ${monthlyIncomes[revenue]}`);
+}
 export {};
-// will throw an error
-// const YourBand = new Bands()
-// YourBand.data = [ 15 , 'nirvana', 'red zep']
-// console.log(YourBand.data)
 //# sourceMappingURL=intro.js.map
