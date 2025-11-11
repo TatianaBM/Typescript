@@ -600,3 +600,155 @@ console.log(MyBand.data)
 // const YourBand = new Bands()
 // YourBand.data = [ 15 , 'nirvana', 'red zep']
 // console.log(YourBand.data)
+
+//LESSON 7
+// Index signatures
+// when we do not know the object properties in advance
+// An index signature in TypeScript lets you define types for dynamically named object properties. 
+// It provides a way to enforce type safety when working with objects where the property names are unknown 
+// ahead of time.
+
+// sometimes while creating an interface we do not know the properties yet and this is when index comes in hand
+// or when we want to access these properties dynamically
+// normal interface - but there is a problem to access obj propertis dynamically
+// interface TransactionObj {
+//     Pizza: number,
+//     Books: number,
+//     Job: number
+// }
+
+// now we create index signature
+// [index: string]: number - meaning all of the keys will be strings and all of the values will be numbers
+// but key cant be boolean
+// optional : we can assign read only meaning no changes to value allowed
+interface TransactionObj {
+    readonly [index: string]: number
+    //e.g. we could use union types
+    //[index: string]: number | number | boolean
+}
+// we can also write interface like here
+// interface TransactionObj {
+//     readonly [index: string]: number
+//     // here we can list required properties 
+//     Pizza: number,
+//     Books: number,
+//     Job: number
+// }
+
+const todaysTransactions: TransactionObj = {
+    Pizza: -10,
+    Books: -5,
+    Job: 50
+}
+console.log(todaysTransactions.Pizza)
+console.log(todaysTransactions['Pizza'])
+
+//we cant reassign value cause we have readonly in interface
+//todaysTransactions.Pizza = 44
+
+// examples of accessing the pizza property dynamically
+let prop: string = 'Pizza'
+console.log(todaysTransactions[prop])
+
+const todaysNet = (transactions: TransactionObj): number => {
+    let total  = 0
+    for (const transaction in transactions) {
+        //Guard the value (explicit check)
+        if(typeof transactions[transaction] === 'number') total += transactions[transaction]
+    }
+    return total
+}
+console.log(todaysNet(todaysTransactions))
+
+// TS also cant see properties names in the future, cause in interface we used index signature, and just 
+// indicated that a key will be a string, and value a number. So TS has no idea about actual keay and values
+// here TS does not show an error eventhough such propertie does not exist, console will show undefined
+console.log(todaysTransactions['Dave'])
+
+/////////////////////
+// this way we have required properties and we can add other properties
+interface Student {
+    //we add index signature, we need to mention all types here
+    //as well as undefined cause classes property is optional
+    [key: string]: number | string | number[] | undefined
+    name: string,
+    GPA: number,
+    // optional property
+    classes?: number[]
+}
+const student: Student = {
+    name: 'May',
+    GPA: 3.5,
+    classes: [100,200],
+    age: 20,
+    city: 'Tulsa'
+}
+// TS has no issue with us trying to access test property that does not exist
+// cause TS thinks: may be it will have test property
+console.log(student.test)
+
+//now lets iterate thru the object. all good cause we have index signature
+for (const key in student) {
+    console.log(`${key} : ${student[key]}`)
+}
+
+// lets see an example how to iterate when interfase does not have index signature
+interface People {
+    name: string,
+    age: number,
+    // optional property
+    city?: string
+}
+const engineer: People = {
+    name: 'Kale',
+    age: 20,
+    city: 'Boston'
+}
+
+// now to iterate we are going to use an assertion and keyof and TS has no issue
+for (const key in engineer) {
+    console.log(`${key} : ${engineer[key as keyof People]}`)
+}
+
+//one more variation how to loop thru the object
+// we are retrieving the type of 'typeof student'
+Object.keys(engineer).map(key => {
+    console.log(engineer[key as keyof typeof engineer])
+})
+
+const logEngineerKey = (engineer: People, key: keyof People): void => {
+    console.log(`Enginner ${key} : ${engineer[key]}`)
+}
+logEngineerKey(engineer, 'name')
+logEngineerKey(engineer, 'age')
+//logEngineerKey(engineer, 'country')
+
+/////////////////////////////
+// another way of creating index signatures
+// interface Incomes {
+//     // we can also have union key type (except for boolean)
+//     //[key: string | number]: number
+
+//     //also it cant be a literal type
+//     //key: 'Salary']: number
+//     [key: string]: number
+// }
+// create union type that has string literal
+type Streams = 'salary' | 'bonus' | 'sidehusle'
+
+// Record utility type
+// this type will replace inrerface above
+type Income = Record<Streams, number | string>
+
+const monthlyIncomes: Income = {
+    salary: 500,
+    bonus: 100,
+    sidehusle: 250
+}
+
+// lets loop thru the object
+// TS has a problen here unlike when we use index signature
+// we fix the issue with an assertion as keyof Income
+for (const revenue in monthlyIncomes) {
+    console.log(`${revenue} is ${monthlyIncomes[revenue as keyof Income]}`)
+}
