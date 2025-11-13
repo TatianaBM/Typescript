@@ -752,3 +752,138 @@ const monthlyIncomes: Income = {
 for (const revenue in monthlyIncomes) {
     console.log(`${revenue} is ${monthlyIncomes[revenue as keyof Income]}`)
 }
+
+// LESSON 8
+// Generics are like type variables
+// TS defines strict types for type safe experience
+// this function only works with a srting
+const stringEcho = (arg: string): string => arg
+// what if we want to write more generic function
+// we can do it using type variable or type parameter
+//<T> can be anything, e.g. <A>
+//now this function will work with any type 
+const echo = <T>(arg: T): T => arg
+//this could be useful with utility functions,
+// e.g. when we need to check whether it is a certain type
+const isObj = <T>(arg: T): boolean => {
+    return typeof arg === 'object' && !Array.isArray(arg) && arg !== null
+}
+console.log(typeof null)
+interface Company {
+    name: string
+    total: number
+    field: string
+}
+const itCompany: Company = {
+    name: 'Epam',
+    total: 500,
+    field: 'it'
+}
+console.log(isObj(itCompany))
+console.log(isObj(15))
+console.log(isObj('ka'))
+console.log(isObj(null) + ' we passed null')
+console.log(isObj([1,5,'jaja']))
+
+// good axample when we need to use generic, is when a function has to do some logic 
+// and think of what it needs to return
+// !!arg returns boolean, !arg flips whatever passed into boolean, and !boolean flips again into 1 or 0 
+const isTrue = <T>(arg: T): { arg: T, is: boolean} => {
+    //console.log(Boolean([])) ==> true
+    // here we handle an empty array with false
+    if(Array.isArray(arg) && !arg.length) {
+        return { arg, is: false}
+    } 
+    // here we handle an empty obj with false
+    if(isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return { arg, is: false}
+    }
+    // !!arg and Boolean(arg) give same boolean result
+    return { arg, is: !!arg}
+}
+console.log(isTrue(false))
+console.log(isTrue(0))
+console.log(isTrue(5))
+console.log(isTrue(true))
+console.log(isTrue(-9))
+console.log(isTrue(null))
+console.log(isTrue({}))
+console.log(isTrue({'key1': 'fa', 'key2': 5}))
+console.log(isTrue(''))
+console.log(isTrue('Dave'))
+console.log(isTrue(['Dave', 5]))
+console.log(isTrue(NaN))
+console.log(isTrue(-0))
+
+// now we are goign to re-do this function with interface
+// we used type placeholder in generic <T> in interface
+interface BoolCheck<T> {
+    value: T
+    is: boolean
+}
+
+const checkBoolValue = <T>(arg: T): BoolCheck<T> => {
+    //console.log(Boolean([])) ==> true
+    // here we handle an empty array with false
+    if(Array.isArray(arg) && !arg.length) {
+        return { value: arg, is: false}
+    } 
+    // here we handle an empty obj with false
+    if(isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return { value: arg, is: false}
+    }
+    // !!arg and Boolean(arg) give same boolean result
+    return { value: arg, is: !!arg} 
+}
+console.log(checkBoolValue(0))
+console.log(checkBoolValue(1))
+
+// one more example with extends key word
+// this narrowing the generic type
+interface hasId {
+    id: number
+}
+const processUser = <T extends hasId> (user: T): T => {
+    // process the user with some logic here
+    return user
+}
+console.log(processUser({id: 5}))
+//console.log(processUser({id: 'ka'}))
+console.log(processUser({id: 5, city: 'New York'}))
+
+// more complex examples with extends
+const getUsersProperty = <T extends hasId, K extends keyof T> (users: T[], key: K): T[K][] => {
+    return users.map(user => user[key])
+}
+// T extends hasId -  we have to pass an object that has to have id key
+// K extends keyof T - all the keys of the obj we have passed
+console.log(getUsersProperty([{id: 5, user1: 'Dave', city: 'Tulsa'}], 'city'))
+
+//example of using gererics in a class
+//<T> type valiable
+class StateObject<T> {
+    private data: T
+
+    constructor(value: T) {
+        this.data = value
+    }
+
+    get state(): T {
+        return this.data
+    }
+
+    set state(value: T) {
+        this.data = value
+    }
+}
+const store = new StateObject('John')
+// we cam specify type like this
+//const store = new StateObject<string>('John')
+console.log(store.state)
+// onec we assigned 'john' ts infers that is the type of out state
+//store.state = 12
+store.state = 'Dave'
+console.log(store.state)
+
+const myStore = new StateObject<(string | number | boolean)[]>([15])
+myStore.state = ['dave', 10, true]
