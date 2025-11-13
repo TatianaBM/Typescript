@@ -528,5 +528,112 @@ const monthlyIncomes = {
 for (const revenue in monthlyIncomes) {
     console.log(`${revenue} is ${monthlyIncomes[revenue]}`);
 }
+// LESSON 8
+// Generics are like type variables
+// TS defines strict types for type safe experience
+// this function only works with a srting
+const stringEcho = (arg) => arg;
+// what if we want to write more generic function
+// we can do it using type variable or type parameter
+//<T> can be anything, e.g. <A>
+//now this function will work with any type 
+const echo = (arg) => arg;
+//this could be useful with utility functions,
+// e.g. when we need to check whether it is a certain type
+const isObj = (arg) => {
+    return typeof arg === 'object' && !Array.isArray(arg) && arg !== null;
+};
+console.log(typeof null);
+const itCompany = {
+    name: 'Epam',
+    total: 500,
+    field: 'it'
+};
+console.log(isObj(itCompany));
+console.log(isObj(15));
+console.log(isObj('ka'));
+console.log(isObj(null) + ' we passed null');
+console.log(isObj([1, 5, 'jaja']));
+// good axample when we need to use generic, is when a function has to do some logic 
+// and think of what it needs to return
+// !!arg returns boolean, !arg flips whatever passed into boolean, and !boolean flips again into 1 or 0 
+const isTrue = (arg) => {
+    //console.log(Boolean([])) ==> true
+    // here we handle an empty array with false
+    if (Array.isArray(arg) && !arg.length) {
+        return { arg, is: false };
+    }
+    // here we handle an empty obj with false
+    if (isObj(arg) && !Object.keys(arg).length) {
+        return { arg, is: false };
+    }
+    // !!arg and Boolean(arg) give same boolean result
+    return { arg, is: !!arg };
+};
+console.log(isTrue(false));
+console.log(isTrue(0));
+console.log(isTrue(5));
+console.log(isTrue(true));
+console.log(isTrue(-9));
+console.log(isTrue(null));
+console.log(isTrue({}));
+console.log(isTrue({ 'key1': 'fa', 'key2': 5 }));
+console.log(isTrue(''));
+console.log(isTrue('Dave'));
+console.log(isTrue(['Dave', 5]));
+console.log(isTrue(NaN));
+console.log(isTrue(-0));
+const checkBoolValue = (arg) => {
+    //console.log(Boolean([])) ==> true
+    // here we handle an empty array with false
+    if (Array.isArray(arg) && !arg.length) {
+        return { value: arg, is: false };
+    }
+    // here we handle an empty obj with false
+    if (isObj(arg) && !Object.keys(arg).length) {
+        return { value: arg, is: false };
+    }
+    // !!arg and Boolean(arg) give same boolean result
+    return { value: arg, is: !!arg };
+};
+console.log(checkBoolValue(0));
+console.log(checkBoolValue(1));
+const processUser = (user) => {
+    // process the user with some logic here
+    return user;
+};
+console.log(processUser({ id: 5 }));
+//console.log(processUser({id: 'ka'}))
+console.log(processUser({ id: 5, city: 'New York' }));
+// more complex examples with extends
+const getUsersProperty = (users, key) => {
+    return users.map(user => user[key]);
+};
+// T extends hasId -  we have to pass an object that has to have id key
+// K extends keyof T - all the keys of the obj we have passed
+console.log(getUsersProperty([{ id: 5, user1: 'Dave', city: 'Tulsa' }], 'city'));
+//example of using gererics in a class
+//<T> type valiable
+class StateObject {
+    constructor(value) {
+        this.data = value;
+    }
+    get state() {
+        return this.data;
+    }
+    set state(value) {
+        this.data = value;
+    }
+}
+const store = new StateObject('John');
+// we cam specify type like this
+//const store = new StateObject<string>('John')
+console.log(store.state);
+// onec we assigned 'john' ts infers that is the type of out state
+//store.state = 12
+store.state = 'Dave';
+console.log(store.state);
+const myStore = new StateObject([15]);
+myStore.state = ['dave', 10, true];
 export {};
 //# sourceMappingURL=intro.js.map
