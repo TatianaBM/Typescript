@@ -635,5 +635,74 @@ store.state = 'Dave';
 console.log(store.state);
 const myStore = new StateObject([15]);
 myStore.state = ['dave', 10, true];
+const updateAssignment = (assign, propsToUpdate) => {
+    return { ...assign, ...propsToUpdate };
+};
+const assign1 = {
+    studentId: 'comp123',
+    title: 'Final Project',
+    grade: 0
+};
+// we are overwriting the grade property
+console.log(updateAssignment(assign1, { grade: 95 }));
+const assignGraded = updateAssignment(assign1, { grade: 95 });
+//-----------Required & Readonly utility type 
+// Required<Assignment> required all of the properties 
+const recordAssignment = (assign) => {
+    // here is code 
+    return assign;
+};
+const assignVerified = { ...assignGraded, verified: true };
+// cant change the value cause we set it readonly
+//assignVerified.grade = 88
+// where we are missing a property verified cause we set it as required
+//recordAssignment(assignGraded)
+recordAssignment({ ...assignGraded, verified: true });
+//--------------Record most popular utility type
+// <string, string> means keys will be strings, values will be also strings
+const hexColorMap = {
+    red: 'FF0000',
+    green: '00FF00',
+    blue: '0000FF'
+};
+const finalGrades = {
+    Sara: 'B',
+    Kelly: 'A'
+};
+const gradeata = {
+    Sara: { assign1: 85, assign2: 63 },
+    Kelly: { assign1: 44, assign2: 99 },
+};
+const score = {
+    studentId: 'hah125',
+    grade: 5,
+};
+const preview = {
+    studentId: 'la56',
+    title: 'first ploject',
+};
+//----------------------ReturnType
+//type newAssign = { title: string, points: number }
+const createNewAssign = (title, points) => {
+    return { title, points };
+};
+//use example
+const tsAssign = createNewAssign('Utility Types', 100);
+console.log(tsAssign);
+const assignArgs = ['Generics', 100];
+const tsAssign2 = createNewAssign(...assignArgs);
+console.log(tsAssign2);
+// return type is promise and it is an array Promise<User[]>
+const fetchUsers = async () => {
+    const data = await fetch('https://jsonplaceholder.typicode.com/users').then(res => {
+        return res.json();
+    }).catch(err => {
+        if (err instanceof Error) {
+            console.log(err.message);
+        }
+    });
+    return data;
+};
+fetchUsers().then(users => console.log(users));
 export {};
 //# sourceMappingURL=intro.js.map

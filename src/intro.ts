@@ -887,3 +887,148 @@ console.log(store.state)
 
 const myStore = new StateObject<(string | number | boolean)[]>([15])
 myStore.state = ['dave', 10, true]
+
+// LESSON 9
+// Utility Types for type transformation
+// -----Partial utility type
+interface Assignment {
+    studentId : string,
+    title: string,
+    grade: number,
+    verified?: boolean
+}
+
+const updateAssignment = (assign: Assignment, propsToUpdate: Partial<Assignment>): Assignment => {
+    return {...assign, ...propsToUpdate}
+}
+
+const assign1: Assignment = {
+    studentId: 'comp123',
+    title: 'Final Project',
+    grade: 0
+}
+// we are overwriting the grade property
+console.log(updateAssignment(assign1, {grade: 95}))
+const assignGraded: Assignment = updateAssignment(assign1, {grade: 95})
+
+//-----------Required & Readonly utility type 
+// Required<Assignment> required all of the properties 
+const recordAssignment = (assign: Required<Assignment>): Assignment => {
+    // here is code 
+    return assign
+}
+
+const assignVerified: Readonly<Assignment> = {...assignGraded, verified: true}
+// cant change the value cause we set it readonly
+//assignVerified.grade = 88
+
+// where we are missing a property verified cause we set it as required
+//recordAssignment(assignGraded)
+recordAssignment({...assignGraded, verified: true})
+
+//--------------Record most popular utility type
+// <string, string> means keys will be strings, values will be also strings
+const hexColorMap: Record<string, string> = {
+    red: 'FF0000',
+    green: '00FF00',
+    blue: '0000FF'
+}
+
+type Students = 'Sara' | 'Kelly'
+type LetterGrades =  'A' | 'B' | 'C' | 'D' | 'U'
+const finalGrades: Record<Students, LetterGrades> = {
+    Sara: 'B',
+    Kelly: 'A'
+}
+
+interface Grades {
+    assign1: number,
+    assign2: number
+}
+
+const gradeata: Record<Students, Grades> = {
+    Sara: {assign1: 85, assign2: 63},
+    Kelly: {assign1: 44, assign2: 99},
+}
+
+//-----------------------Pick & Omit
+// pick what you want to use from assignment obj as we create a new type
+type AssignResult = Pick<Assignment, 'studentId' | 'grade'>
+const score: AssignResult = {
+    studentId: 'hah125',
+    grade: 5,
+}
+
+//omit will do the oposite , here we want to omit 'grade' and 'veified' properties of Assignment
+type AssignPreview = Omit<Assignment, 'grade' | 'veified'> 
+const preview: AssignPreview = {
+    studentId: 'la56',
+    title: 'first ploject',
+}
+
+// above were examples  using interface
+
+// ---------------Exclude and Extract BUT they are not going to work with interface
+// they work with string literal and union types
+
+// exclude 'U'
+type AdjustedGrade = Exclude<LetterGrades, 'U'>
+
+// include only A and B grades
+type highGrades = Extract<LetterGrades, 'A' | 'B'>
+
+//----------------Nonnullable
+// here we have possibility of null and underfined
+type AllPossibleGrades = 'Dave' | 'John' | null | undefined
+
+type NamesOnly = NonNullable<AllPossibleGrades>
+
+//----------------------ReturnType
+
+//type newAssign = { title: string, points: number }
+
+const createNewAssign = (title: string, points: number) => {
+    return {title, points}
+}
+// now if we change our createNewAssign, it is automatically goign to update type newAssign
+// cause it is below not above
+// so besically we derive a type from a function
+type newAssign = ReturnType<typeof createNewAssign>
+
+//use example
+const tsAssign: newAssign = createNewAssign('Utility Types', 100)
+console.log(tsAssign)
+
+//------------------------Parameters utility type
+// here we are doing to derive the type from the parameters
+type AssingParam = Parameters<typeof createNewAssign>
+
+const assignArgs: AssingParam = ['Generics', 100]
+
+const tsAssign2: newAssign = createNewAssign(...assignArgs)
+console.log(tsAssign2)
+
+//----------------------awaited utility type
+// helps us with the ReturnType of a Promise
+interface User {
+    id: number,
+    name: string,
+    username: string,
+    email: string
+}
+// return type is promise and it is an array Promise<User[]>
+const fetchUsers = async (): Promise<User[]> => {
+    const data = await fetch('https://jsonplaceholder.typicode.com/users').then(res => {
+        return res.json()
+    }).catch(err => {
+        if(err instanceof Error) {
+            console.log(err.message)
+        }
+    })
+    return data
+}
+
+// we added awaited so that this type is an array of users not a Promise!!!!!
+type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>>
+
+fetchUsers().then(users => console.log(users))
