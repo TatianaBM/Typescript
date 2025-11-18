@@ -30,23 +30,23 @@ console.log(username)
 let a : number = 12
 let b : number = 6
 let c : number = 2
-//let a = 12
-//let b = '6'
+// let a = 12
+// let b = '6'
 // js uses dynamic types so it ok in js to number divide by string as it will convert string into a number if can
 // however ts compiler will start complaing about types
-// thats why we need to spicify types 
+// thats why we need to specify types 
 console.log(a/b)
 console.log(b*c)
 // valid js = valid ts but it does not mean compiler is goign to like it. So we need to pay attention to ts compilet to help us write better code
 
 // LESSON 2
-// ts is staticl typed language meanign tyypes are check during compilation
+// ts is statical typed language meaning types are checked during compilation
 // whereas js if dynamically typed language means types are checked during runtime
 
-//we implicitly declared type
+// we implicitly declared type
 let myName : string = 'Tania'
-//compliler does not like it cause we implicitly declared string data tyype
-//myName = 42
+// compliler does not like it cause we implicitly declared string data type
+// myName = 42
 let mySurname: string
 mySurname = 'White'
 
@@ -71,7 +71,7 @@ const sum1 = (a : number, b : string) => {
     return a + b
 }
 
-//union type
+// union type
 let postId : string | number
 let isActive : boolean | number
 
@@ -89,7 +89,7 @@ let guitars = ['strat', 'les paul', 1980]
 
 let mixedData = ['tomorrow', 1985, true]
 
-//stringArr[0] = 42
+// stringArr[0] = 42
 stringArr[0] = '42'
 stringArr.push('hello')
 
@@ -97,7 +97,7 @@ guitars[0] = 1546
 guitars.unshift('world')
 console.log(guitars)
 
-//stringArr = guitars
+// stringArr = guitars
 guitars = stringArr
 console.log(guitars)
 
@@ -106,25 +106,25 @@ mixedData = guitars
 let test = []
 let bands : string[] = []
 bands.push('Van')
-//bands.push(42)
+// bands.push(42)
 // the length of the array and the order of the types do not matter
-//ts just knows what types belong to the array
-//however to be more strict we can create a tuple
+// ts just knows what types belong to the array
+// however to be more strict we can create a tuple
 // we define specific position and specific length
 let strictTuple : [string, number, boolean] = ['lunch', 42, true]
 strictTuple.push('85')
-//strictTuple[4] = 'el'
+// strictTuple[4] = 'el'
 strictTuple[0] = 'dinner'
-//strictTuple[0] = 55
+// strictTuple[0] = 55
 console.log(strictTuple)
 // below is union type , not tuple
 let mixed =  ['dinner', 2, false]
 mixed = strictTuple
-//strictTuple = mixed    not possible cause tuple thinks that mixed may not have all three elements
+// strictTuple = mixed    not possible cause tuple thinks that mixed may not have all three elements
 
 // Objects
 let myObj : object
-//we can reassign to an array cause array is also an object in js
+// we can reassign to an array cause array is also an object in js
 myObj = []
 console.log(typeof myObj)
 myObj = bands
@@ -134,9 +134,11 @@ const exampleObj = {
     prop1: 'Tania',
     prop2: true,
 }
-//exampleObj.prop2 = 42
+// exampleObj.prop2 = 42
 
-// define types for the object in advance
+// Type Aliases
+// define types for the object in advance using Type Aliases
+// Type Aliases can be used for primitives like string or more complex types such as objects and arrays
 type Guitarist = {
     name: string,
     active: boolean,
@@ -155,9 +157,9 @@ let jp: Guitarist = {
 }
 
 evh = jp
-//evh.years = 45
+// evh.years = 45
 
-//to make a property optional
+// to make a property optional
 type Engineer = {
     name: string,
     active?: boolean,
@@ -174,7 +176,29 @@ const greetEnginner = (eng: Engineer) => {
 }
 console.log(greetEnginner(eng1))
 
+// types Uppercase, Lowercase, Uncapitalize, Capitalize are useful when you write code for libraries
+type S = 'Hello Las Vegas'
+type O = Uppercase<S>
+type L = Lowercase<S>
+type Uncap = Uncapitalize<S>
+
+// intersection Types
+type Product = {
+    id: number,
+    name: string,
+    price: number
+}
+type DiscountedProduct = Product & { discount: number }
+const discProduct: DiscountedProduct = {
+    id: 5,
+    name: 'jeans',
+    price: 25,
+    discount: 20
+}
+
 // another way to predefine types is to use key word interface
+// interface also allows types to be shared berween valiables and objects
+// Interfaces are similar to type aliases, except they only apply to object types.
 interface Person {
     name?: string,
     age: number,
@@ -206,9 +230,25 @@ const greetSalles = (person: Person) => {
 console.log(greetSalles(sallesPerson))
 // interface here works the same as type
 
+// we can extend interface, meaning we can create a new interface with the same properties as the original,
+// plus adding new properties 
+interface Address {
+    street: string, 
+    city: string,
+    zicode: number
+}
+interface FullAddress extends Address {
+    country: string
+}
+const myAddress: FullAddress = {
+    street: 'Langgstr.', 
+    city: 'Zurich',
+    zicode: 8013,
+    country: 'Switzerland'
+}
 // Enums
-//Enums are one of the few features TypeScript has which is not a type-level extension of JavaScript.
-//Enums allow a developer to define a set of named constants. Using enums can make it easier to document intent,
+// Enums are one of the few features TypeScript has which is not a type-level extension of JavaScript.
+// Enums allow a developer to define a set of named constants. Using enums can make it easier to document intent,
 // or create a set of distinct cases. TypeScript provides both numeric and string-based enums
 
 enum Grade {
@@ -358,7 +398,7 @@ const infinite1 = () => {
     }
 }
 
-// when never type can be useful
+// when 'never' type can be useful
 
 // custom type guards
 const isNumber = (value: any): boolean => {
@@ -402,12 +442,12 @@ logMsg(addOrConcat(1,2,'concat'))
 // in here myVal is string type, addOrConcat returns string or number, and ts does not like it
 //let myVal: string = addOrConcat(2,2,'concat')
 // we can fix this with an assertion
-// it slike we tell ts hey ingore the warning, we know better it is string type
+// its like we tell ts hey ingore the warning, we know better it is string type
 let myVal: string = addOrConcat(2,2,'concat') as string
 
 // Be careful! TS sees no problem here but there is a problem, as we know function will return a string
 let nextVal: number = addOrConcat(2,2,'concat') as number
-//however here TS will tell us that it is a mistake, so TS checks whem it can
+//however here TS will tell us that it is a mistake, so TS checks when it can
 //10 as string
 
 // forced casting or double casting or two assertions
@@ -584,7 +624,7 @@ class Bands {
         //make sure it an array
         if (Array.isArray(value) && value.every(el => typeof el === 'string')) {
             this.dataState = value
-            //setters cant return a value that is way we have an empty return
+            //setters cant return a value that is why we have an empty return
             return 
         } else {
             throw new Error('Param is not an array of strings')
@@ -661,8 +701,8 @@ const todaysNet = (transactions: TransactionObj): number => {
 console.log(todaysNet(todaysTransactions))
 
 // TS also cant see properties names in the future, cause in interface we used index signature, and just 
-// indicated that a key will be a string, and value a number. So TS has no idea about actual keay and values
-// here TS does not show an error eventhough such propertie does not exist, console will show undefined
+// indicated that a key will be a string, and value a number. So TS has no idea about actual key and values
+// here TS does not show an error eventhough such property does not exist, console will show undefined
 console.log(todaysTransactions['Dave'])
 
 /////////////////////
@@ -692,7 +732,7 @@ for (const key in student) {
     console.log(`${key} : ${student[key]}`)
 }
 
-// lets see an example how to iterate when interfase does not have index signature
+// lets see an example how to iterate when interface does not have index signature
 interface People {
     name: string,
     age: number,
@@ -756,7 +796,7 @@ for (const revenue in monthlyIncomes) {
 // LESSON 8
 // Generics are like type variables
 // TS defines strict types for type safe experience
-// this function only works with a srting
+// this function only works with a strting
 const stringEcho = (arg: string): string => arg
 // what if we want to write more generic function
 // we can do it using type variable or type parameter
@@ -913,6 +953,7 @@ const assignGraded: Assignment = updateAssignment(assign1, {grade: 95})
 
 //-----------Required & Readonly utility type 
 // Required<Assignment> required all of the properties 
+// Required removes the ability to be optional
 const recordAssignment = (assign: Required<Assignment>): Assignment => {
     // here is code 
     return assign
@@ -920,10 +961,10 @@ const recordAssignment = (assign: Required<Assignment>): Assignment => {
 
 const assignVerified: Readonly<Assignment> = {...assignGraded, verified: true}
 // cant change the value cause we set it readonly
-//assignVerified.grade = 88
+// assignVerified.grade = 88
 
-// where we are missing a property verified cause we set it as required
-//recordAssignment(assignGraded)
+// here we are missing a property verified cause we set it as required
+// recordAssignment(assignGraded)
 recordAssignment({...assignGraded, verified: true})
 
 //--------------Record most popular utility type
@@ -946,7 +987,7 @@ interface Grades {
     assign2: number
 }
 
-const gradeata: Record<Students, Grades> = {
+const gradeData: Record<Students, Grades> = {
     Sara: {assign1: 85, assign2: 63},
     Kelly: {assign1: 44, assign2: 99},
 }
@@ -999,6 +1040,16 @@ type newAssign = ReturnType<typeof createNewAssign>
 const tsAssign: newAssign = createNewAssign('Utility Types', 100)
 console.log(tsAssign)
 
+// one more use case: e.g. whenever i use a function from a library and i need to use the type this 
+// function returns
+function getUser (id: string, age: number) {
+    return {'name': 'Tatiana', id, age}
+}
+// i do not want to manually type the type this function is going to return, 
+// i want this automatically being infered for me
+type T = ReturnType<typeof getUser>
+
+
 //------------------------Parameters utility type
 // here we are doing to derive the type from the parameters
 type AssingParam = Parameters<typeof createNewAssign>
@@ -1007,6 +1058,39 @@ const assignArgs: AssingParam = ['Generics', 100]
 
 const tsAssign2: newAssign = createNewAssign(...assignArgs)
 console.log(tsAssign2)
+
+// one more example
+type P = Parameters<typeof getUser>
+const array: P = ['myid', 30]
+// use case for Parameter: when two functions are lincked together thru parameters, meaning
+// when we wrapping a function into another, so when the main function changes, 
+// everything will be updated automatically for me
+function userData(id: number, name: string, city: string) {
+    return {name}
+}
+// function userDataWrapper( id: number, name: string, isActive: boolean) {
+//     return userData(id, name, city)
+// }
+// instead of above function we will use Parameter
+function userDataWrapper( 
+    id: Parameters<typeof userData>[0],
+    name: Parameters<typeof userData>[1],
+    city: Parameters<typeof userData>[2] ,
+    isActive: boolean) {
+    return userData(id, name, city)
+}
+
+//-------------------------Parameters in Constructor functions (Classes)
+class Maker {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+}
+// now i want to get the paramenters this construction function takes
+// Parametes function we used above works only on normal functions, it does not work on constructor functions
+type C = ConstructorParameters<typeof Maker>
+
 
 //----------------------awaited utility type
 // helps us with the ReturnType of a Promise
@@ -1032,3 +1116,13 @@ const fetchUsers = async (): Promise<User[]> => {
 type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>>
 
 fetchUsers().then(users => console.log(users))
+
+// one more example of awaited
+async function getUseFromDatabase(id:string) {
+    return Promise.resolve({name: 'Tatiana'})
+}
+//lets see what type this function is going to return 
+// it is going to be a promise
+// but we need to know what is inside of this promise
+// so we use awaited type -  it tells us what the promise returns
+type U = Awaited<ReturnType<typeof getUseFromDatabase>>
