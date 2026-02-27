@@ -1,10 +1,19 @@
 // LESSON 1
 // typescript is js with syntax for types, it helps writing better js
 // ts extends js
+// js also has typing - type coercion
+// example console.log(5 == '5') js with convert types here
+// js has dynamic types meaning type is defined during the run type 
+// e.g. in js we can let num = 5; num = '5'; num = {num: 1}  we are changing types here
+// whereas types in ts is some sort of documentation, we have a clear understanding of data. Great for big projects
+// easier to debug
+// autocomplete
+
+// ts has dynamic types meaning types are checked during compilation
 let username = 'miro'
 console.log(username)
 // type in terminal tsc filename.ts  - to compile ts file into js file
-// we will notive var instead of let - this is to make js compatible with old browsers
+// we will notice var instead of let - this is to make js compatible with old browsers
 // everytime we make a change in this file we need to recompile ts into js by running 'tsc filename.ts' in terminal
 // to avoid it we can run tsc filename.ts -w ---- where -w means watch  this file for any changes
 // it is great if we are working with one file
@@ -15,13 +24,13 @@ console.log(username)
 // "rootDir": "./src",   // this is where all our ts files will be
 // "outDir": "./build/js",   // this is where js will be compiled
 // now we run tsc -w without specifing any ts file, as it will look for all ts files and compile them in js files
-// now that we have ts config fiel variables will be initialized with let and not var, this is because of  "target": "esnext", in config file 
+// now that we have ts config file variables will be initialized with let and not var, this is because of  "target": "esnext", in config file 
 // if we put  "target": "es5" to be compatible with oldest browsers we would get var
 // if we decide to remove a ts file we would need to remove it from js files folder as well
 // to ignore other ts files that are not in src folder add to config file  "include": ["src"]
 
 // if we do not want to compile if any ts error: set "noEmitOnError": true in ts config file
-// meaning if we made ts erro js file wont be generated and we see not found error
+// meaning if we made ts error js file wont be generated and we see not found error
 
 // if we set noEmitOnError to false meaning we still compile eventhough there if a ts error, 
 // and we decide to override (no compiling) config file run in terminal tsc --noEmitOnError -w
@@ -455,7 +464,7 @@ let nextVal: number = addOrConcat(2,2,'concat') as number
 (10 as unknown) as string
 
 // The DOM
-// adding ! means non NUll
+// adding ! means not NUll not underfined
 // const img = document.getElementById('img')!
 const img = document.getElementById('img') as HTMLImageElement
 // no need to use ! with combination with as
