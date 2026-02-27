@@ -253,3 +253,32 @@ type E = Exclude<Role, 'user'>
 type M = Exclude<Role, 'user' | 'moderator'>
 // remove repeated and leave unique types in Role
 type L = Exclude<Role, OtherRole>
+
+/////////////////////////////
+interface Userr {
+    name: string,
+    active: boolean
+}
+const users : Userr[] = [
+    {
+        name: 'Anna',
+        active: true
+    },
+    {
+        name: 'Pavel',
+        active: false
+    },
+    {
+        name: 'John',
+        active: true
+    }
+]
+// function getActiveNames(users : Userr[] ) : typeof [] {
+//     const result : string[]= []
+//     for(let i: number = 0; i <= users.length; i++) {
+//         if(users[i].active === true) {
+//             result.push(users[i].name)
+//         }
+//     }
+//     return result
+// }
